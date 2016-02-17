@@ -43,7 +43,7 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
         return 0;
     }
 
-    public class ScoreViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ScoreViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public ScoreViewHolder(View itemView) {
             super(itemView);
@@ -75,6 +75,13 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
 
 //            TODO: Add switch case statement to handle button clicks.
 
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+//            TODO: Remove player from the array and notify data set.
+
+            return false;
         }
     }
 }

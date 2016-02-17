@@ -9,4 +9,6 @@
     <string name="title_activity_score_keeper">Game Title</string>
     <string name="button_minus_text">-</string>
     <string name="button_add_text">+</string>
+    <string name="button_add_players_text">ADD NEW PLAYERS</string>
+    <string name="button_add_game_text">ADD NEW GAMES</string>
 </resources>

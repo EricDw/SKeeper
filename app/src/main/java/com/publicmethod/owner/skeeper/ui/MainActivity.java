@@ -1,10 +1,8 @@
 package com.publicmethod.owner.skeeper.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,13 +11,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.publicmethod.owner.skeeper.R;
+import com.publicmethod.owner.skeeper.constants.Keys;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    private RecyclerView mRecyclerView;
+
+    private Button mAddNewPlayersButton, mAddNewGamesButton;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +31,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
+//        Initialize Views
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -46,11 +41,14 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        Initialize Views
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mAddNewPlayersButton = (Button) findViewById(R.id.button_add_players);
+        mAddNewGamesButton = (Button) findViewById(R.id.button_add_game);
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
 
-
-
+//        Add Listeners
+        mAddNewPlayersButton.setOnClickListener(this);
+        mAddNewGamesButton.setOnClickListener(this);
+        mFab.setOnClickListener(this);
     }
 
     @Override
@@ -85,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -109,5 +107,32 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id) {
+
+            case R.id.button_add_players:
+//                TODO: Start PlayersListActivity.
+                break;
+            case R.id.button_add_game:
+//                TODO: Start GamesListActivity.
+                break;
+            case R.id.fab:
+//                TODO: playLastGame();
+//                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                int numberOfPlayers = 2;
+
+                Intent intent = new Intent(this, ScoreKeeperActivity.class);
+                intent.putExtra(Keys.KEY_DEFAULT_PLAYERS_NUMBER, numberOfPlayers);
+                startActivity(intent);
+            default:
+        }
+
+
     }
 }
