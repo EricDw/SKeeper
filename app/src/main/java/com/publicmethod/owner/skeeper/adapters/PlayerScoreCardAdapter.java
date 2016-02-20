@@ -1,6 +1,7 @@
 package com.publicmethod.owner.skeeper.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,22 +18,22 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
 
     private Player[] mPlayers;
 
-    private TextView mPlayerName;
-    private EditText mPlayerScore;
-    private Button mMinusButton, mAddButton;
-
     public PlayerScoreCardAdapter(Player[] players) {
         mPlayers = players;
 
     }
 
     @Override
-    public PlayerScoreCardAdapter.ScoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+    public ScoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.player_score_list_item, parent, false);
+
+        return new ScoreViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(PlayerScoreCardAdapter.ScoreViewHolder holder, int position) {
+    public void onBindViewHolder(ScoreViewHolder holder, int position) {
 
         holder.bindPlayers(mPlayers[position]);
 
@@ -40,10 +41,14 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mPlayers.length;
     }
 
     public class ScoreViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+
+        public TextView mPlayerName;
+        public EditText mPlayerScore;
+        public Button mMinusButton, mAddButton;
 
         public ScoreViewHolder(View itemView) {
             super(itemView);
@@ -67,7 +72,7 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
         public void bindPlayers(Player player) {
 
             mPlayerName.setText(player.getName());
-            mPlayerScore.setText(player.getScore());
+            mPlayerScore.setText(String.valueOf(player.getScore()));
         }
 
         @Override

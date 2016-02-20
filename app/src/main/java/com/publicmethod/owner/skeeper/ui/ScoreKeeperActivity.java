@@ -1,5 +1,7 @@
 package com.publicmethod.owner.skeeper.ui;
 
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -20,11 +22,14 @@ public class ScoreKeeperActivity extends AppCompatActivity implements View.OnCli
     private RecyclerView mRecyclerView;
     private PlayerScoreCardAdapter mPlayerScoreCardAdapter;
     private LinearLayoutManager mLinearLayoutManager;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
 
     private FloatingActionButton mFab;
 
     private Player[] mPlayers;
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +41,11 @@ public class ScoreKeeperActivity extends AppCompatActivity implements View.OnCli
 
 //        Initialize variables
 
-        mPlayers = new Player[getIntent().getIntExtra(Keys.KEY_DEFAULT_PLAYERS_NUMBER,2)];
+        mSharedPreferences = getSharedPreferences(Keys.getPrefsFile(), MODE_PRIVATE);
+        mEditor = mSharedPreferences.edit();
+
+        mPlayers = new Player[getNumberOfPlayers()];
+        setPlayerInformation(mPlayers);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mPlayerScoreCardAdapter = new PlayerScoreCardAdapter(mPlayers);
@@ -49,9 +58,43 @@ public class ScoreKeeperActivity extends AppCompatActivity implements View.OnCli
         mRecyclerView.setAdapter(mPlayerScoreCardAdapter);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-
         mRecyclerView.setHasFixedSize(true);
 
+
+    }
+
+    private void setPlayerInformation(Player[] players) {
+        for (int i = 0; i < players.length; i++) {
+            players[i] = new Player(mSharedPreferences.getString(Keys.KEY_PLAYER_NAME + String.valueOf(i + 1),
+                    Keys.KEY_DEFAULT_PLAYER_NAME.concat(String.valueOf(i + 1))),
+                    mSharedPreferences.getInt(Keys.KEY_PLAYER_SCORE + String.valueOf(i),
+                            Keys.KEY_DEFAULT_PLAYER_SCORE));
+        }
+    }
+
+    private void savePlayerInformation() {
+        for (int i = 0; i < mPlayers.length; i++) {
+
+            mEditor.putString(Keys.KEY_PLAYER_NAME.concat(String.valueOf(i + 1)),
+                    mPlayers[i].getName().concat(String.valueOf(i + 1))).
+                    apply();
+
+            mEditor.putInt(Keys.KEY_PLAYER_SCORE.concat(String.valueOf(i + 1)),
+                    mPlayers[i].getScore()).
+                    apply();
+
+        }
+        mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT,
+                getNumberOfPlayers()).apply();
+    }
+
+    /**
+     * Returns the current amount of players stored in Shared Preferences.
+     *
+     * @return int
+     */
+    private int getNumberOfPlayers() {
+        return mSharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT, Keys.KEY_DEFAULT_PLAYERS_AMOUNT);
 
     }
 
@@ -73,6 +116,11 @@ public class ScoreKeeperActivity extends AppCompatActivity implements View.OnCli
 
 //        TODO: Refactor into switch case statement.
         if (id == R.id.action_add_player) {
+            mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT, getNumberOfPlayers() + 1);
+            savePlayerInformation();
+            setPlayerInformation(mPlayers);
+            mPlayerScoreCardAdapter.notifyDataSetChanged();
+
 
 //            TODO: Add new player to list.
             return true;
@@ -87,11 +135,21 @@ public class ScoreKeeperActivity extends AppCompatActivity implements View.OnCli
 
         switch (id) {
             case R.id.fab:
-//                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
 
-                default:
+                mEditor.clear().apply();
+                mPlayerScoreCardAdapter.notifyDataSetChanged();
+
+            default:
 
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        savePlayerInformation();
+
+
     }
 }

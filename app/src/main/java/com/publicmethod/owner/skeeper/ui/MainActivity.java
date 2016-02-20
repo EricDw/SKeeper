@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.publicmethod.owner.skeeper.R;
-import com.publicmethod.owner.skeeper.constants.Keys;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -128,7 +127,6 @@ public class MainActivity extends AppCompatActivity
                 int numberOfPlayers = 2;
 
                 Intent intent = new Intent(this, ScoreKeeperActivity.class);
-                intent.putExtra(Keys.KEY_DEFAULT_PLAYERS_NUMBER, numberOfPlayers);
                 startActivity(intent);
             default:
         }
