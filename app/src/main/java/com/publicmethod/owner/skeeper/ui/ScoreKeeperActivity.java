@@ -28,6 +28,7 @@ public class ScoreKeeperActivity extends AppCompatActivity implements View.OnCli
     private FloatingActionButton mFab;
 
     private Player[] mPlayers;
+    private Player[] mDefaultPlayersArray;
 
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -45,7 +46,10 @@ public class ScoreKeeperActivity extends AppCompatActivity implements View.OnCli
         mEditor = mSharedPreferences.edit();
 
         mPlayers = new Player[getNumberOfPlayers()];
-        setPlayerInformation(mPlayers);
+        mDefaultPlayersArray = new Player[2];
+
+        setPlayerInformation(mDefaultPlayersArray, true);
+        savePlayerInformation();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mPlayerScoreCardAdapter = new PlayerScoreCardAdapter(mPlayers);
@@ -63,29 +67,44 @@ public class ScoreKeeperActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    private void setPlayerInformation(Player[] players) {
-        for (int i = 0; i < players.length; i++) {
-            players[i] = new Player(mSharedPreferences.getString(Keys.KEY_PLAYER_NAME + String.valueOf(i + 1),
-                    Keys.KEY_DEFAULT_PLAYER_NAME.concat(String.valueOf(i + 1))),
-                    mSharedPreferences.getInt(Keys.KEY_PLAYER_SCORE + String.valueOf(i),
-                            Keys.KEY_DEFAULT_PLAYER_SCORE));
+    private void setPlayerInformation(Player[] players, boolean isDefaultPlayerArray) {
+
+        if (isDefaultPlayerArray) {
+
+            for (int i = 0; i < players.length; i++) {
+                players[i] = new Player(Keys.KEY_PLAYER_NAME + String.valueOf(i + 1),
+                        Keys.KEY_DEFAULT_PLAYER_SCORE);
+            }
+
+        } else {
+
+            for (int i = 0; i < players.length; i++) {
+                String playerName = mSharedPreferences.getString(Keys.KEY_PLAYER_NAME + String.valueOf(i + 1),
+                        Keys.KEY_DEFAULT_PLAYER_NAME + " " + String.valueOf(i + 1));
+
+                int playerScore = mSharedPreferences.getInt(Keys.KEY_PLAYER_SCORE + String.valueOf(i),
+                        Keys.KEY_DEFAULT_PLAYER_SCORE);
+
+                players[i] = new Player(playerName, playerScore);
+            }
         }
     }
 
     private void savePlayerInformation() {
         for (int i = 0; i < mPlayers.length; i++) {
 
-            mEditor.putString(Keys.KEY_PLAYER_NAME.concat(String.valueOf(i + 1)),
-                    mPlayers[i].getName().concat(String.valueOf(i + 1))).
+            mEditor.putString(Keys.KEY_PLAYER_NAME + String.valueOf(i + 1),
+                    mPlayers[i].getName()).
                     apply();
 
-            mEditor.putInt(Keys.KEY_PLAYER_SCORE.concat(String.valueOf(i + 1)),
+            mEditor.putInt(Keys.KEY_PLAYER_SCORE + String.valueOf(i + 1),
                     mPlayers[i].getScore()).
                     apply();
 
         }
         mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT,
-                getNumberOfPlayers()).apply();
+                getNumberOfPlayers()).
+                apply();
     }
 
     /**
@@ -117,9 +136,10 @@ public class ScoreKeeperActivity extends AppCompatActivity implements View.OnCli
 //        TODO: Refactor into switch case statement.
         if (id == R.id.action_add_player) {
             mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT, getNumberOfPlayers() + 1);
-            savePlayerInformation();
-            setPlayerInformation(mPlayers);
-            mPlayerScoreCardAdapter.notifyDataSetChanged();
+            //savePlayerInformation();
+            //setPlayerInformation(mPlayers);
+
+            this.mPlayerScoreCardAdapter.notifyItemInserted(getNumberOfPlayers());
 
 
 //            TODO: Add new player to list.

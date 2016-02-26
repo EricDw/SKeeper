@@ -16,10 +16,10 @@ import com.publicmethod.owner.skeeper.model.Player;
  */
 public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCardAdapter.ScoreViewHolder> {
 
-    private Player[] mPlayers;
+    private Player[] mPlayerses;
 
-    public PlayerScoreCardAdapter(Player[] players) {
-        mPlayers = players;
+    public PlayerScoreCardAdapter(Player[] playerses) {
+        mPlayerses = playerses;
 
     }
 
@@ -35,13 +35,13 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
     @Override
     public void onBindViewHolder(ScoreViewHolder holder, int position) {
 
-        holder.bindPlayers(mPlayers[position]);
+        holder.bindPlayers(mPlayerses[position]);
 
     }
 
     @Override
     public int getItemCount() {
-        return mPlayers.length;
+        return mPlayerses.length;
     }
 
     public class ScoreViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
