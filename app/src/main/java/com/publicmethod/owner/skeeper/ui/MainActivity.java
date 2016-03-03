@@ -1,5 +1,6 @@
 package com.publicmethod.owner.skeeper.ui;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity
 
     private Player[] mPlayers;
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +85,6 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.fab:
-//                TODO: playLastGame();
                 startCalculatorApplication();
             default:
         }
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setComponent(new ComponentName(Keys.CALCULATOR_PACKAGE_NAME,
-               Keys.CALCULATOR_CLASS_NAME));
+                Keys.CALCULATOR_CLASS_NAME));
         try {
             this.startActivity(intent);
         } catch (ActivityNotFoundException noSuchActivity) {
@@ -143,8 +144,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
 //        TODO: make this a switch case statement.
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -160,5 +162,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        TODO: Persist player scores
     }
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.publicmethod.owner.skeeper.R;
 import com.publicmethod.owner.skeeper.model.Player;
@@ -79,6 +80,28 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
         public void onClick(View v) {
 
 //            TODO: Add switch case statement to handle button clicks.
+            int id = v.getId();
+            switch (id){
+                case R.id.button_minus:
+                    int decreasedScore = Integer.parseInt(mPlayerScore.getText().toString()) - 1;
+                    if (decreasedScore < 0) {
+                        Toast.makeText(itemView.getContext(), R.string.toast_text_score_to_low, Toast.LENGTH_LONG).show();
+                        return;
+                    }else {
+                        mPlayerScore.setText(String.valueOf(decreasedScore));
+                    }
+                    break;
+                case R.id.button_add:
+                int increasedScore = Integer.parseInt(mPlayerScore.getText().toString()) + 1;
+                if (increasedScore >= 9999) {
+                        Toast.makeText(itemView.getContext(), R.string.toast_text_score_to_high, Toast.LENGTH_LONG).show();
+                        return;
+                    }else {
+                        mPlayerScore.setText(String.valueOf(increasedScore));
+                    }
+                break;
+                default:
+            }
 
         }
 
