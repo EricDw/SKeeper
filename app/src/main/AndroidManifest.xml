@@ -18,15 +18,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.ScoreKeeperActivity"
-            android:label="@string/title_activity_score_keeper"
-            android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.publicmethod.owner.skeeper.ui.MainActivity"/>
-        </activity>
     </application>
 
 </manifest>

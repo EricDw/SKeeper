@@ -7,6 +7,8 @@ public class Keys {
 //    int keys
     public static final int KEY_DEFAULT_PLAYER_SCORE = 0;
     public static final String KEY_DEFAULT_PLAYER_NAME = "Player ";
+    public static final String CALCULATOR_PACKAGE_NAME = "com.android.calculator2";
+    public static final String CALCULATOR_CLASS_NAME = "com.android.calculator2.Calculator";
 
     //    String keys
     public static final int KEY_DEFAULT_PLAYERS_AMOUNT = 2;

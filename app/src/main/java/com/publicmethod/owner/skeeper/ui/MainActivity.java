@@ -1,6 +1,9 @@
 package com.publicmethod.owner.skeeper.ui;
 
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -8,20 +11,30 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.publicmethod.owner.skeeper.R;
+import com.publicmethod.owner.skeeper.adapters.PlayerScoreCardAdapter;
+import com.publicmethod.owner.skeeper.constants.Keys;
+import com.publicmethod.owner.skeeper.model.Player;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    private RecyclerView mRecyclerView;
+    private PlayerScoreCardAdapter mPlayerScoreCardAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
 
-    private Button mAddNewPlayersButton, mAddNewGamesButton;
     private FloatingActionButton mFab;
+
+    private Player[] mPlayers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        Initialize Views
+//        Initialize Views and Variables
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -40,14 +53,55 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mAddNewPlayersButton = (Button) findViewById(R.id.button_add_players);
-        mAddNewGamesButton = (Button) findViewById(R.id.button_add_game);
+        mPlayers = new Player[2];
+
+        for (int i = 0; i < mPlayers.length; i++) {
+            final String name = String.format("%s %s",
+                    Keys.KEY_DEFAULT_PLAYER_NAME, (i + 1));
+
+            final int score = Keys.KEY_DEFAULT_PLAYER_SCORE;
+            mPlayers[i] = new Player(name, score);
+        }
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mPlayerScoreCardAdapter = new PlayerScoreCardAdapter(mPlayers);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setAdapter(mPlayerScoreCardAdapter);
+        mSharedPreferences = getSharedPreferences(Keys.getPrefsFile(), MODE_PRIVATE);
+        mEditor = mSharedPreferences.edit();
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
 //        Add Listeners
-        mAddNewPlayersButton.setOnClickListener(this);
-        mAddNewGamesButton.setOnClickListener(this);
         mFab.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id) {
+            case R.id.fab:
+//                TODO: playLastGame();
+                startCalculatorApplication();
+            default:
+        }
+
+
+    }
+
+    private void startCalculatorApplication() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setComponent(new ComponentName(Keys.CALCULATOR_PACKAGE_NAME,
+               Keys.CALCULATOR_CLASS_NAME));
+        try {
+            this.startActivity(intent);
+        } catch (ActivityNotFoundException noSuchActivity) {
+            // handle exception where calculator intent filter is not registered
+        }
     }
 
     @Override
@@ -67,6 +121,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -81,7 +136,6 @@ public class MainActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -106,31 +160,5 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-
-        switch (id) {
-
-            case R.id.button_add_players:
-//                TODO: Start PlayersListActivity.
-                break;
-            case R.id.button_add_game:
-//                TODO: Start GamesListActivity.
-                break;
-            case R.id.fab:
-//                TODO: playLastGame();
-//                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                int numberOfPlayers = 2;
-
-                Intent intent = new Intent(this, ScoreKeeperActivity.class);
-                startActivity(intent);
-            default:
-        }
-
-
     }
 }
