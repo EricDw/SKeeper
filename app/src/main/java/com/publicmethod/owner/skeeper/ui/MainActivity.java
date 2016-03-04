@@ -57,14 +57,6 @@ public class MainActivity extends AppCompatActivity
 
         mPlayers = new Player[2];
 
-        for (int i = 0; i < mPlayers.length; i++) {
-            final String name = String.format("%s %s",
-                    Keys.KEY_DEFAULT_PLAYER_NAME, (i + 1));
-
-            final int score = Keys.KEY_DEFAULT_PLAYER_SCORE;
-            mPlayers[i] = new Player(name, score);
-        }
-
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mPlayerScoreCardAdapter = new PlayerScoreCardAdapter(mPlayers);
         mLinearLayoutManager = new LinearLayoutManager(this);
@@ -76,6 +68,15 @@ public class MainActivity extends AppCompatActivity
 
 //        Add Listeners
         mFab.setOnClickListener(this);
+
+//        Run Logic
+        for (int i = 0; i < mPlayers.length; i++) {
+            final String name = String.format("%s %s",
+                    Keys.KEY_DEFAULT_PLAYER_NAME, (i + 1));
+
+            mPlayers[i] = new Player(name, mSharedPreferences.getInt(Keys.KEY_PLAYER_SCORE + i,
+                    Keys.KEY_DEFAULT_PLAYER_SCORE));
+        }
     }
 
 
@@ -167,6 +168,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-//        TODO: Persist player scores
+        for (int i = 0; i < mPlayers.length; i++) {
+
+            mEditor.putInt(Keys.KEY_PLAYER_SCORE + i, mPlayers[i].getScore());
+            
+        }
+        mEditor.apply();
     }
 }

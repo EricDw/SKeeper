@@ -81,25 +81,29 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
 
 //            TODO: Add switch case statement to handle button clicks.
             int id = v.getId();
-            switch (id){
+            int updatedScoreCount = mPlayers[getAdapterPosition()].getScore();
+
+            switch (id) {
                 case R.id.button_minus:
-                    int decreasedScore = Integer.parseInt(mPlayerScore.getText().toString()) - 1;
-                    if (decreasedScore < 0) {
+                    updatedScoreCount--;
+                    if (updatedScoreCount < 0) {
                         Toast.makeText(itemView.getContext(), R.string.toast_text_score_to_low, Toast.LENGTH_LONG).show();
                         return;
-                    }else {
-                        mPlayerScore.setText(String.valueOf(decreasedScore));
+                    } else {
+                        mPlayers[getAdapterPosition()].setScore(updatedScoreCount);
+                        notifyDataSetChanged();
                     }
                     break;
                 case R.id.button_add:
-                int increasedScore = Integer.parseInt(mPlayerScore.getText().toString()) + 1;
-                if (increasedScore >= 9999) {
+                    updatedScoreCount++;
+                    if (updatedScoreCount >= 9999) {
                         Toast.makeText(itemView.getContext(), R.string.toast_text_score_to_high, Toast.LENGTH_LONG).show();
                         return;
-                    }else {
-                        mPlayerScore.setText(String.valueOf(increasedScore));
+                    } else {
+                        mPlayers[getAdapterPosition()].setScore(updatedScoreCount);
+                        notifyDataSetChanged();
                     }
-                break;
+                    break;
                 default:
             }
 
