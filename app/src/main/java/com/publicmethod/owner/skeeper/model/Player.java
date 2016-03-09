@@ -1,5 +1,9 @@
 package com.publicmethod.owner.skeeper.model;
 
+import com.publicmethod.owner.skeeper.constants.Keys;
+
+import java.util.ArrayList;
+
 /**
  * Created by Owner on 2016-02-16.
  */
@@ -12,6 +16,17 @@ public class Player {
 
         mName = name;
         mScore = score;
+    }
+
+    public static ArrayList<Player> createContactsList(int numContacts) {
+        ArrayList<Player> contacts = new ArrayList<Player>();
+
+        for (int i = 0; i < numContacts; i++) {
+
+            contacts.add(new Player(Keys.KEY_DEFAULT_PLAYER_NAME + (i + 1), Keys.KEY_DEFAULT_PLAYER_SCORE));
+        }
+
+        return contacts;
     }
 
     public String getName() {

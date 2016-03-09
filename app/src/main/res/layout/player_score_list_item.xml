@@ -26,6 +26,7 @@
         android:textStyle="bold"
         android:textSize="20sp"
         android:textColor="@android:color/black"
+        android:focusableInTouchMode="true"
         tools:text="9999"/>
 
     <Button

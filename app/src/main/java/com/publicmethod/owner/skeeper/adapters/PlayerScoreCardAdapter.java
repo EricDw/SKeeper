@@ -12,15 +12,17 @@ import android.widget.Toast;
 import com.publicmethod.owner.skeeper.R;
 import com.publicmethod.owner.skeeper.model.Player;
 
+import java.util.List;
+
 /**
  * Created by Owner on 2016-02-16.
  */
 public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCardAdapter.ScoreViewHolder> {
 
-    private Player[] mPlayers;
+    private List<Player> mPlayerList;
 
-    public PlayerScoreCardAdapter(Player[] players) {
-        mPlayers = players;
+    public PlayerScoreCardAdapter(List<Player> playerList) {
+        mPlayerList = playerList;
 
     }
 
@@ -36,13 +38,13 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
     @Override
     public void onBindViewHolder(ScoreViewHolder holder, int position) {
 
-        holder.bindPlayers(mPlayers[position]);
+        holder.bindPlayers(mPlayerList.get(position));
 
     }
 
     @Override
     public int getItemCount() {
-        return mPlayers.length;
+        return mPlayerList.size();
     }
 
     public class ScoreViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -74,14 +76,14 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
 
             mPlayerName.setText(player.getName());
             mPlayerScore.setText(String.valueOf(player.getScore()));
+
         }
 
         @Override
         public void onClick(View v) {
 
-//            TODO: Add switch case statement to handle button clicks.
             int id = v.getId();
-            int updatedScoreCount = mPlayers[getAdapterPosition()].getScore();
+            int updatedScoreCount = mPlayerList.get(getAdapterPosition()).getScore();
 
             switch (id) {
                 case R.id.button_minus:
@@ -90,8 +92,8 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
                         Toast.makeText(itemView.getContext(), R.string.toast_text_score_to_low, Toast.LENGTH_LONG).show();
                         return;
                     } else {
-                        mPlayers[getAdapterPosition()].setScore(updatedScoreCount);
-                        notifyDataSetChanged();
+                        updatePlayerScore(updatedScoreCount);
+                        notifyItemChanged(getAdapterPosition());
                     }
                     break;
                 case R.id.button_add:
@@ -100,8 +102,8 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
                         Toast.makeText(itemView.getContext(), R.string.toast_text_score_to_high, Toast.LENGTH_LONG).show();
                         return;
                     } else {
-                        mPlayers[getAdapterPosition()].setScore(updatedScoreCount);
-                        notifyDataSetChanged();
+                        updatePlayerScore(updatedScoreCount);
+                        notifyItemChanged(getAdapterPosition());
                     }
                     break;
                 default:
@@ -112,8 +114,19 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
         @Override
         public boolean onLongClick(View v) {
 //            TODO: Remove player from the array and notify data set.
+            removePlayer(getAdapterPosition());
 
             return false;
+        }
+
+        public void removePlayer(int positionInArrayList) {
+            mPlayerList.remove(positionInArrayList);
+            notifyItemRemoved(positionInArrayList);
+
+        }
+
+        private void updatePlayerScore(int updatedScoreCount) {
+            mPlayerList.get(getAdapterPosition()).setScore(updatedScoreCount);
         }
     }
 }

@@ -24,6 +24,8 @@ import com.publicmethod.owner.skeeper.adapters.PlayerScoreCardAdapter;
 import com.publicmethod.owner.skeeper.constants.Keys;
 import com.publicmethod.owner.skeeper.model.Player;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity
 
     private FloatingActionButton mFab;
 
-    private Player[] mPlayers;
+    private List<Player> mPlayerList;
 
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -55,43 +57,31 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mPlayers = new Player[2];
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mPlayerScoreCardAdapter = new PlayerScoreCardAdapter(mPlayers);
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRecyclerView.setAdapter(mPlayerScoreCardAdapter);
         mSharedPreferences = getSharedPreferences(Keys.getPrefsFile(), MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
+
+        mPlayerList = Player.createContactsList(Keys.KEY_DEFAULT_PLAYERS_AMOUNT);
+
+        initializeRecyclerView();
+
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
 //        Add Listeners
         mFab.setOnClickListener(this);
 
 //        Run Logic
-        for (int i = 0; i < mPlayers.length; i++) {
-            final String name = String.format("%s %s",
-                    Keys.KEY_DEFAULT_PLAYER_NAME, (i + 1));
-
-            mPlayers[i] = new Player(name, mSharedPreferences.getInt(Keys.KEY_PLAYER_SCORE + i,
-                    Keys.KEY_DEFAULT_PLAYER_SCORE));
-        }
     }
 
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-
-        switch (id) {
-            case R.id.fab:
-                startCalculatorApplication();
-            default:
-        }
-
+    private void initializeRecyclerView() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mPlayerScoreCardAdapter = new PlayerScoreCardAdapter(mPlayerList);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setAdapter(mPlayerScoreCardAdapter);
+        mRecyclerView.setHasFixedSize(false);
 
     }
+
 
     private void startCalculatorApplication() {
         Intent intent = new Intent();
@@ -106,6 +96,32 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void addNewPlayer() {
+
+        final String name = String.format("%s %s",
+                Keys.KEY_DEFAULT_PLAYER_NAME, (mPlayerList.size() + 1));
+
+        Player player = new Player(name, mSharedPreferences.getInt(Keys.KEY_PLAYER_SCORE + String.valueOf(mPlayerList.size() + 1),
+                Keys.KEY_DEFAULT_PLAYER_SCORE));
+
+        mPlayerList.add(mPlayerList.size(), player);
+        mPlayerScoreCardAdapter.notifyItemInserted(mPlayerList.size());
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id) {
+            case R.id.fab:
+                startCalculatorApplication();
+            default:
+        }
+
+
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -116,13 +132,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -132,8 +148,18 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_add_player:
+                addNewPlayer();
+                break;
+
+            case R.id.action_clear_players:
+                mEditor.clear().apply();
+                break;
+
+            default:
+                return true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -168,11 +194,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        for (int i = 0; i < mPlayers.length; i++) {
+        for (int i = 0; i < mPlayerList.size(); i++) {
 
-            mEditor.putInt(Keys.KEY_PLAYER_SCORE + i, mPlayers[i].getScore());
-            
+            mEditor.putInt(Keys.KEY_PLAYER_SCORE + i, mPlayerList.get(i).getScore());
         }
+
+        mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT, mSharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT,
+                Keys.KEY_DEFAULT_PLAYERS_AMOUNT));
         mEditor.apply();
     }
 }
