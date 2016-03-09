@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
         mSharedPreferences = getSharedPreferences(Keys.getPrefsFile(), MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
 
-        mPlayerList = Player.createContactsList(Keys.KEY_DEFAULT_PLAYERS_AMOUNT);
+        mPlayerList = Player.createPlayersList(Keys.KEY_DEFAULT_PLAYERS_AMOUNT);
 
         initializeRecyclerView();
 
@@ -155,6 +155,10 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.action_clear_players:
                 mEditor.clear().apply();
+                mPlayerList.clear();
+                addNewPlayer();
+                addNewPlayer();
+                mPlayerScoreCardAdapter.notifyDataSetChanged();
                 break;
 
             default:

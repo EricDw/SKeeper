@@ -5,7 +5,7 @@ import com.publicmethod.owner.skeeper.constants.Keys;
 import java.util.ArrayList;
 
 /**
- * Created by Owner on 2016-02-16.
+ * Created by Eric on 2016-02-16.
  */
 public class Player {
 
@@ -18,15 +18,20 @@ public class Player {
         mScore = score;
     }
 
-    public static ArrayList<Player> createContactsList(int numContacts) {
-        ArrayList<Player> contacts = new ArrayList<Player>();
+    /**
+     *
+     * @param numPlayers The amount of players to be added to the Array List.
+     * @return An ArrayList with a type of Player.
+     */
+    public static ArrayList<Player> createPlayersList(int numPlayers) {
+        ArrayList<Player> players = new ArrayList<Player>();
 
-        for (int i = 0; i < numContacts; i++) {
+        for (int i = 0; i < numPlayers; i++) {
 
-            contacts.add(new Player(Keys.KEY_DEFAULT_PLAYER_NAME + (i + 1), Keys.KEY_DEFAULT_PLAYER_SCORE));
+            players.add(new Player(Keys.KEY_DEFAULT_PLAYER_NAME + (i + 1), Keys.KEY_DEFAULT_PLAYER_SCORE));
         }
 
-        return contacts;
+        return players;
     }
 
     public String getName() {

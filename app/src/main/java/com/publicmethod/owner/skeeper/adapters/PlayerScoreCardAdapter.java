@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,7 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
         public TextView mPlayerName;
         public EditText mPlayerScore;
         public Button mMinusButton, mAddButton;
+        public LinearLayout mLinearLayout;
 
         public ScoreViewHolder(View itemView) {
             super(itemView);
@@ -63,6 +65,8 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
 
             mMinusButton.setOnClickListener(this);
             mAddButton.setOnClickListener(this);
+
+            mPlayerName.setOnLongClickListener(this);
 
 
         }
@@ -115,8 +119,7 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
         public boolean onLongClick(View v) {
 //            TODO: Remove player from the array and notify data set.
             removePlayer(getAdapterPosition());
-
-            return false;
+            return true;
         }
 
         public void removePlayer(int positionInArrayList) {
