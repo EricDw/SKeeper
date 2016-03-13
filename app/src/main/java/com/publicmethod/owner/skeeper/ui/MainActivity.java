@@ -1,6 +1,5 @@
 package com.publicmethod.owner.skeeper.ui;
 
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity
 
     private List<Player> mPlayerList;
 
-    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +58,8 @@ public class MainActivity extends AppCompatActivity
         mSharedPreferences = getSharedPreferences(Keys.getPrefsFile(), MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
 
-        mPlayerList = Player.createPlayersList(Keys.KEY_DEFAULT_PLAYERS_AMOUNT);
+//        TODO: Save state for rotate events.
+        mPlayerList = Player.createPlayersList(getPlayersAmount());
 
         initializeRecyclerView();
 
@@ -70,6 +69,11 @@ public class MainActivity extends AppCompatActivity
         mFab.setOnClickListener(this);
 
 //        Run Logic
+    }
+
+
+    private int getPlayersAmount() {
+        return mSharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT, Keys.KEY_DEFAULT_PLAYERS_AMOUNT);
     }
 
     private void initializeRecyclerView() {
@@ -98,7 +102,7 @@ public class MainActivity extends AppCompatActivity
 
     private void addNewPlayer() {
 
-        final String name = String.format("%s %s",
+        final String name = String.format("%s%s",
                 Keys.KEY_DEFAULT_PLAYER_NAME, (mPlayerList.size() + 1));
 
         Player player = new Player(name, mSharedPreferences.getInt(Keys.KEY_PLAYER_SCORE + String.valueOf(mPlayerList.size() + 1),
@@ -107,6 +111,21 @@ public class MainActivity extends AppCompatActivity
         mPlayerList.add(mPlayerList.size(), player);
         mPlayerScoreCardAdapter.notifyItemInserted(mPlayerList.size());
 
+    }
+
+    /**
+     * Saves the amount of items in the player list as well as the their scores to
+     * the SharedPreferences file.
+     */
+    private void savePlayerInformation() {
+        for (int i = 0; i < mPlayerList.size(); i++) {
+
+            mEditor.putInt(Keys.KEY_PLAYER_SCORE + i, mPlayerList.get(i).getScore());
+        }
+
+        mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT, mSharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT,
+                Keys.KEY_DEFAULT_PLAYERS_AMOUNT));
+        mEditor.apply();
     }
 
     @Override
@@ -122,6 +141,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -132,7 +152,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -142,12 +161,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+//         Handle action bar item clicks here. The action bar will
+//         automatically handle clicks on the Home/Up button, so long
+//         as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+//        noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_add_player:
                 addNewPlayer();
@@ -198,13 +217,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        for (int i = 0; i < mPlayerList.size(); i++) {
-
-            mEditor.putInt(Keys.KEY_PLAYER_SCORE + i, mPlayerList.get(i).getScore());
-        }
-
-        mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT, mSharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT,
-                Keys.KEY_DEFAULT_PLAYERS_AMOUNT));
-        mEditor.apply();
+        savePlayerInformation();
     }
 }

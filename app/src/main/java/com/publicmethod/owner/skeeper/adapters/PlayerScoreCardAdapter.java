@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +52,6 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
         public TextView mPlayerName;
         public EditText mPlayerScore;
         public Button mMinusButton, mAddButton;
-        public LinearLayout mLinearLayout;
 
         public ScoreViewHolder(View itemView) {
             super(itemView);
