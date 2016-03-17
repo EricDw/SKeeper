@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
         mSharedPreferences = getSharedPreferences(Keys.getPrefsFile(), MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
 
-        mPlayerList = Player.createPlayersList(getPlayersAmount(),mSharedPreferences);
+        mPlayerList = Player.createPlayersList(getPlayersAmount(), mSharedPreferences);
 
         initializeRecyclerView();
 
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity
             mEditor.putInt(Keys.KEY_PLAYER_SCORE + i, mPlayerList.get(i).getScore());
         }
 
-        mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT,mPlayerList.size());
+        mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT, mPlayerList.size());
         mEditor.apply();
     }
 
@@ -193,20 +193,27 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-//        TODO: make this a switch case statement.
-        if (id == R.id.nav_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
+        switch (id) {
+            case R.id.nav_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                break;
 
-        } else if (id == R.id.nav_slideshow) {
+            case R.id.nav_gallery:
+                break;
 
-        } else if (id == R.id.nav_manage) {
+            case R.id.nav_slideshow:
+                break;
 
-        } else if (id == R.id.nav_share) {
+            case R.id.nav_manage:
+                break;
 
-        } else if (id == R.id.nav_send) {
+            case R.id.nav_share:
+                break;
 
+            case R.id.nav_send:
+                break;
+            default:
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

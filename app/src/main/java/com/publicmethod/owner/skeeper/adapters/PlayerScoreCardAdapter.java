@@ -115,7 +115,6 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
 
         @Override
         public boolean onLongClick(View v) {
-//            TODO: Remove player from the array and notify data set.
             removePlayer(getAdapterPosition());
             return true;
         }
