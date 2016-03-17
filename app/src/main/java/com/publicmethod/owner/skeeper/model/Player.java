@@ -21,6 +21,7 @@ public class Player {
     }
 
     /**
+     *Returns an ArrayLists of players and sets the scores from the SharedPreferences file.
      *
      * @param numPlayers The amount of players to be added to the Array List.
      * @param sharedPreferences The file where players information is stored.
