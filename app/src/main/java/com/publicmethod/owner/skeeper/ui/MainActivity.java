@@ -1,5 +1,6 @@
 package com.publicmethod.owner.skeeper.ui;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity
 
     private List<Player> mPlayerList;
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +60,7 @@ public class MainActivity extends AppCompatActivity
         mSharedPreferences = getSharedPreferences(Keys.getPrefsFile(), MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
 
-//        TODO: Save state for rotate events.
-        mPlayerList = Player.createPlayersList(getPlayersAmount());
+        mPlayerList = Player.createPlayersList(getPlayersAmount(),mSharedPreferences);
 
         initializeRecyclerView();
 
@@ -123,8 +124,7 @@ public class MainActivity extends AppCompatActivity
             mEditor.putInt(Keys.KEY_PLAYER_SCORE + i, mPlayerList.get(i).getScore());
         }
 
-        mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT, mSharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT,
-                Keys.KEY_DEFAULT_PLAYERS_AMOUNT));
+        mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT,mPlayerList.size());
         mEditor.apply();
     }
 
@@ -212,6 +212,12 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        savePlayerInformation();
     }
 
     @Override
