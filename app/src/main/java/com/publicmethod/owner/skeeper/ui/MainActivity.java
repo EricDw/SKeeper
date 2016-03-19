@@ -23,6 +23,7 @@ import com.publicmethod.owner.skeeper.R;
 import com.publicmethod.owner.skeeper.adapters.PlayerScoreCardAdapter;
 import com.publicmethod.owner.skeeper.constants.Keys;
 import com.publicmethod.owner.skeeper.model.Player;
+import com.publicmethod.owner.skeeper.model.PlayersHandler;
 
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         mSharedPreferences = getSharedPreferences(Keys.getPrefsFile(), MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
 
-        mPlayerList = Player.createPlayersList(getPlayersAmount(), mSharedPreferences);
+        mPlayerList = PlayersHandler.createPlayersList(mSharedPreferences);
 
         initializeRecyclerView();
 
@@ -72,11 +73,6 @@ public class MainActivity extends AppCompatActivity
 //        Run Logic
     }
 
-
-    private int getPlayersAmount() {
-        return mSharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT, Keys.KEY_DEFAULT_PLAYERS_AMOUNT);
-    }
-
     private void initializeRecyclerView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mPlayerScoreCardAdapter = new PlayerScoreCardAdapter(mPlayerList);
@@ -86,7 +82,6 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setHasFixedSize(false);
 
     }
-
 
     private void startCalculatorApplication() {
         Intent intent = new Intent();
@@ -101,33 +96,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void addNewPlayer() {
-
-        final String name = String.format("%s%s",
-                Keys.KEY_DEFAULT_PLAYER_NAME, (mPlayerList.size() + 1));
-
-        Player player = new Player(name, mSharedPreferences.getInt(Keys.KEY_PLAYER_SCORE + String.valueOf(mPlayerList.size() + 1),
-                Keys.KEY_DEFAULT_PLAYER_SCORE));
-
-        mPlayerList.add(mPlayerList.size(), player);
-        mPlayerScoreCardAdapter.notifyItemInserted(mPlayerList.size());
-
-    }
-
-    /**
-     * Saves the amount of items in the player list as well as the their scores to
-     * the SharedPreferences file.
-     */
-    private void savePlayerInformation() {
-        for (int i = 0; i < mPlayerList.size(); i++) {
-
-            mEditor.putInt(Keys.KEY_PLAYER_SCORE + i, mPlayerList.get(i).getScore());
-        }
-
-        mEditor.putInt(Keys.KEY_PLAYERS_AMOUNT, mPlayerList.size());
-        mEditor.apply();
-    }
-
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -140,7 +108,6 @@ public class MainActivity extends AppCompatActivity
 
 
     }
-
 
     @Override
     public void onBackPressed() {
@@ -169,15 +136,11 @@ public class MainActivity extends AppCompatActivity
 //        noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_add_player:
-                addNewPlayer();
+                PlayersHandler.addNewPlayers(mPlayerList, mSharedPreferences, mPlayerScoreCardAdapter, 1);
                 break;
 
             case R.id.action_clear_players:
-                mEditor.clear().apply();
-                mPlayerList.clear();
-                addNewPlayer();
-                addNewPlayer();
-                mPlayerScoreCardAdapter.notifyDataSetChanged();
+                resetPlayersList();
                 break;
 
             default:
@@ -186,6 +149,14 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void resetPlayersList() {
+        mEditor.clear().apply();
+        mPlayerList.clear();
+        PlayersHandler.addNewPlayers(mPlayerList, mSharedPreferences, mPlayerScoreCardAdapter,
+                mSharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT, Keys.KEY_DEFAULT_PLAYERS_AMOUNT));
+        mPlayerScoreCardAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -224,12 +195,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        savePlayerInformation();
+        PlayersHandler.savePlayerInformation(mPlayerList, mEditor);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        savePlayerInformation();
+        PlayersHandler.savePlayerInformation(mPlayerList, mEditor);
     }
 }

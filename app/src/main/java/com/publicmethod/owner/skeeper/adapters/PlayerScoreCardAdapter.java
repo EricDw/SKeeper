@@ -15,7 +15,7 @@ import com.publicmethod.owner.skeeper.model.Player;
 import java.util.List;
 
 /**
- * Created by Owner on 2016-02-16.
+ * Created by Eric on 2016-02-16.
  */
 public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCardAdapter.ScoreViewHolder> {
 
