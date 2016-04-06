@@ -75,13 +75,18 @@ public class PlayersHandler {
         sharedPreferencesEditor.apply();
     }
 
-    public static void resetPlayersList(List listOfPlayers, SharedPreferences sharedPreferences,
+    public static void resetPlayersList(List<Player> listOfPlayers,
+                                        SharedPreferences sharedPreferences,
                                         PlayerScoreCardAdapter playerScoreCardAdapter) {
-        sharedPreferences.edit().clear().apply();
-        listOfPlayers.clear();
-        addNewPlayers(listOfPlayers, sharedPreferences, playerScoreCardAdapter,
-                sharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT, Keys.KEY_DEFAULT_PLAYERS_AMOUNT));
-        playerScoreCardAdapter.notifyDataSetChanged();
+        if (listOfPlayers != null) {
+            sharedPreferences.edit().clear().apply();
+            listOfPlayers.clear();
+            addNewPlayers(listOfPlayers, sharedPreferences, playerScoreCardAdapter,
+                    sharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT, Keys.KEY_DEFAULT_PLAYERS_AMOUNT));
+            playerScoreCardAdapter.notifyDataSetChanged();
+        }else {
+            return;
+        }
     }
 
 }
