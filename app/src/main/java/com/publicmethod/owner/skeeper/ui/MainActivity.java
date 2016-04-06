@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    // TODO: 2016-03-21 Convert into dialog themed activity and move to its own class.
     private void startCalculatorApplication() {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_MAIN);
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.action_clear_players:
-                resetPlayersList();
+                PlayersHandler.resetPlayersList(mPlayerList,mSharedPreferences,mPlayerScoreCardAdapter);
                 break;
 
             default:
@@ -149,14 +150,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void resetPlayersList() {
-        mEditor.clear().apply();
-        mPlayerList.clear();
-        PlayersHandler.addNewPlayers(mPlayerList, mSharedPreferences, mPlayerScoreCardAdapter,
-                mSharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT, Keys.KEY_DEFAULT_PLAYERS_AMOUNT));
-        mPlayerScoreCardAdapter.notifyDataSetChanged();
     }
 
     @Override

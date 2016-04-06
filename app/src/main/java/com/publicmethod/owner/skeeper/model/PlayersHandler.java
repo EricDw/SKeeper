@@ -65,14 +65,23 @@ public class PlayersHandler {
      * Saves the amount of items in the player list as well as the their scores to
      * the SharedPreferences file.
      */
-    public static void savePlayerInformation(List<Player> playerList, SharedPreferences.Editor sharedPreferncesEditor) {
+    public static void savePlayerInformation(List<Player> playerList, SharedPreferences.Editor sharedPreferencesEditor) {
         for (int i = 0; i < playerList.size(); i++) {
 
-            sharedPreferncesEditor.putInt(Keys.KEY_PLAYER_SCORE + i, playerList.get(i).getScore());
+            sharedPreferencesEditor.putInt(Keys.KEY_PLAYER_SCORE + i, playerList.get(i).getScore());
         }
 
-        sharedPreferncesEditor.putInt(Keys.KEY_PLAYERS_AMOUNT, playerList.size());
-        sharedPreferncesEditor.apply();
+        sharedPreferencesEditor.putInt(Keys.KEY_PLAYERS_AMOUNT, playerList.size());
+        sharedPreferencesEditor.apply();
+    }
+
+    public static void resetPlayersList(List listOfPlayers, SharedPreferences sharedPreferences,
+                                        PlayerScoreCardAdapter playerScoreCardAdapter) {
+        sharedPreferences.edit().clear().apply();
+        listOfPlayers.clear();
+        addNewPlayers(listOfPlayers, sharedPreferences, playerScoreCardAdapter,
+                sharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT, Keys.KEY_DEFAULT_PLAYERS_AMOUNT));
+        playerScoreCardAdapter.notifyDataSetChanged();
     }
 
 }
