@@ -46,17 +46,15 @@ public class PlayersHandler {
                                      PlayerScoreCardAdapter playerScoreCardAdapter,
                                      int numberOfPlayersToAdd) {
 
+
         for (int i = 0; i < numberOfPlayersToAdd; i++) {
 
-            // TODO: 2016-03-19 Fix player name not updating
-            String name = String.format("%s%s",
-                    Keys.KEY_DEFAULT_PLAYER_NAME, (playerArrayList.size() + 1));
+            String name = String.format("%s%s", Keys.KEY_DEFAULT_PLAYER_NAME, playerArrayList.size() + 1);
 
-            Player player = new Player(name,
-                    sharedPreferences.getInt(Keys.KEY_PLAYER_SCORE + String.valueOf(i + 1),
-                            Keys.KEY_DEFAULT_PLAYER_SCORE));
+            Player player = new Player(name, sharedPreferences.getInt(Keys.KEY_PLAYER_SCORE + String.valueOf(i + 1),
+                    Keys.KEY_DEFAULT_PLAYER_SCORE));
 
-            playerArrayList.add(i, player);
+            playerArrayList.add(playerArrayList.size(), player);
             playerScoreCardAdapter.notifyItemInserted(playerArrayList.size());
         }
     }
@@ -84,7 +82,7 @@ public class PlayersHandler {
             addNewPlayers(listOfPlayers, sharedPreferences, playerScoreCardAdapter,
                     sharedPreferences.getInt(Keys.KEY_PLAYERS_AMOUNT, Keys.KEY_DEFAULT_PLAYERS_AMOUNT));
             playerScoreCardAdapter.notifyDataSetChanged();
-        }else {
+        } else {
             return;
         }
     }

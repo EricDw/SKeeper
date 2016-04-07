@@ -94,6 +94,9 @@ public class MainActivity extends AppCompatActivity
             this.startActivity(intent);
         } catch (ActivityNotFoundException noSuchActivity) {
             // handle exception where calculator intent filter is not registered
+//            intent.setAction(Intent.ACTION_MAIN);
+//            intent.addCategory(Intent.CATEGORY_APP_BROWSER);
+//
         }
     }
 
