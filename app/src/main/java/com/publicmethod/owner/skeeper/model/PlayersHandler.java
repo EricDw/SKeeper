@@ -46,7 +46,6 @@ public class PlayersHandler {
                                      PlayerScoreCardAdapter playerScoreCardAdapter,
                                      int numberOfPlayersToAdd) {
 
-
         for (int i = 0; i < numberOfPlayersToAdd; i++) {
 
             String name = String.format("%s%s", Keys.KEY_DEFAULT_PLAYER_NAME, playerArrayList.size() + 1);
