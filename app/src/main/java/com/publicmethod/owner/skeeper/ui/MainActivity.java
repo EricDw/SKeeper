@@ -1,8 +1,6 @@
 package com.publicmethod.owner.skeeper.ui;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -95,17 +93,20 @@ public class MainActivity extends AppCompatActivity
 
     // TODO: 2016-03-21 Convert into dialog themed activity and move to its own class.
     private void startCalculatorApplication() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        intent.setComponent(new ComponentName(Constants.CALCULATOR_PACKAGE_NAME,
-                Constants.CALCULATOR_CLASS_NAME));
-        try {
-            this.startActivity(intent);
-        } catch (ActivityNotFoundException noSuchActivity) {
-            // TODO: 2016-04-23 handle exception where calculator intent filter is not registered
+//        Intent intent = new Intent();
+//        intent.setAction(Intent.ACTION_MAIN);
+//        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+//        intent.setComponent(new ComponentName(Constants.CALCULATOR_PACKAGE_NAME,
+//                Constants.CALCULATOR_CLASS_NAME));
+//        try {
+//            this.startActivity(intent);
+//        } catch (ActivityNotFoundException noSuchActivity) {
+//            // TODO: 2016-04-23 handle exception where calculator intent filter is not registered
+//
+//        }
 
-        }
+        Intent intent = new Intent(this, CalculatorActivity.class);
+        startActivity(intent);
     }
 
     @Override

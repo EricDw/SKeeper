@@ -26,6 +26,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.publicmethod.owner.skeeper.ui.MainActivity"/>
         </activity>
+        <activity
+            android:name=".ui.CalculatorActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.publicmethod.owner.skeeper.ui.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>
