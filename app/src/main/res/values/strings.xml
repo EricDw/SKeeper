@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">SKeeper</string>
+    <string name="app_name">Skeeper</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>C:\Program Files\Java\jdk1.8.0_20\bin\java.exe
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>

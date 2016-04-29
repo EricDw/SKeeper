@@ -1,5 +1,6 @@
 package com.publicmethod.owner.skeeper.adapters;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,7 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
 
     public class ScoreViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
+        public CardView mCardView;
         public TextView mPlayerName;
         public EditText mPlayerScore;
         public Button mMinusButton, mAddButton;
@@ -56,6 +58,7 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
         public ScoreViewHolder(View itemView) {
             super(itemView);
 
+            mCardView = (CardView) itemView.findViewById(R.id.cardView);
             mPlayerName = (TextView) itemView.findViewById(R.id.textView_player_name);
             mPlayerScore = (EditText) itemView.findViewById(R.id.editText_player_score);
             mMinusButton = (Button) itemView.findViewById(R.id.button_minus);
@@ -120,6 +123,7 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
         }
 
         public void removePlayer(int positionInArrayList) {
+            mPlayerList.get(positionInArrayList).setScore(0);
             mPlayerList.remove(positionInArrayList);
             notifyItemRemoved(positionInArrayList);
 

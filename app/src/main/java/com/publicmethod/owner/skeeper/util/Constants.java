@@ -1,9 +1,9 @@
-package com.publicmethod.owner.skeeper.constants;
+package com.publicmethod.owner.skeeper.util;
 
 /**
  * Created by Owner on 2016-02-17.
  */
-public class Keys {
+public class Constants {
 //    int keys
     public static final int KEY_DEFAULT_PLAYER_SCORE = 0;
     public static final String KEY_DEFAULT_PLAYER_NAME = "Player ";

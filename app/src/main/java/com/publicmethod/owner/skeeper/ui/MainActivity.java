@@ -21,10 +21,11 @@ import android.view.View;
 
 import com.publicmethod.owner.skeeper.R;
 import com.publicmethod.owner.skeeper.adapters.PlayerScoreCardAdapter;
-import com.publicmethod.owner.skeeper.constants.Keys;
 import com.publicmethod.owner.skeeper.model.Player;
 import com.publicmethod.owner.skeeper.model.PlayersHandler;
+import com.publicmethod.owner.skeeper.util.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -58,12 +59,14 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mSharedPreferences = getSharedPreferences(Keys.getPrefsFile(), MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(Constants.getPrefsFile(), MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
-
-        mPlayerList = PlayersHandler.createPlayersList(mSharedPreferences);
+        mPlayerList = new ArrayList<Player>();
 
         initializeRecyclerView();
+        PlayersHandler.createPlayersList(mSharedPreferences, mPlayerScoreCardAdapter);
+        addPlayersToList(PlayersHandler.createPlayersList(mSharedPreferences, mPlayerScoreCardAdapter));
+
 
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -71,6 +74,13 @@ public class MainActivity extends AppCompatActivity
         mFab.setOnClickListener(this);
 
 //        Run Logic
+    }
+
+    private void addPlayersToList(ArrayList<Player> playersList) {
+        for (int i = 0; i < playersList.size(); i++) {
+            mPlayerList.add(playersList.get(i));
+            mPlayerScoreCardAdapter.notifyItemInserted(i);
+        }
     }
 
     private void initializeRecyclerView() {
@@ -88,15 +98,13 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        intent.setComponent(new ComponentName(Keys.CALCULATOR_PACKAGE_NAME,
-                Keys.CALCULATOR_CLASS_NAME));
+        intent.setComponent(new ComponentName(Constants.CALCULATOR_PACKAGE_NAME,
+                Constants.CALCULATOR_CLASS_NAME));
         try {
             this.startActivity(intent);
         } catch (ActivityNotFoundException noSuchActivity) {
-            // handle exception where calculator intent filter is not registered
-//            intent.setAction(Intent.ACTION_MAIN);
-//            intent.addCategory(Intent.CATEGORY_APP_BROWSER);
-//
+            // TODO: 2016-04-23 handle exception where calculator intent filter is not registered
+
         }
     }
 
@@ -144,7 +152,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.action_clear_players:
-                PlayersHandler.resetPlayersList(mPlayerList,mSharedPreferences,mPlayerScoreCardAdapter);
+                PlayersHandler.resetPlayersList(mPlayerList, mSharedPreferences, mPlayerScoreCardAdapter);
                 break;
 
             default:
