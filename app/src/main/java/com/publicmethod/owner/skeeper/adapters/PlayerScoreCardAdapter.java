@@ -103,7 +103,7 @@ public class PlayerScoreCardAdapter extends RecyclerView.Adapter<PlayerScoreCard
                     break;
                 case R.id.button_add:
                     updatedScoreCount++;
-                    if (updatedScoreCount >= 9999) {
+                    if (updatedScoreCount > 9999) {
                         Toast.makeText(itemView.getContext(), R.string.toast_text_score_to_high, Toast.LENGTH_LONG).show();
                         return;
                     } else {

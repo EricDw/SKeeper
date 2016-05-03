@@ -5,10 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,8 +22,7 @@ import com.publicmethod.owner.skeeper.util.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RecyclerView mRecyclerView;
     private PlayerScoreCardAdapter mPlayerScoreCardAdapter;
@@ -43,37 +38,29 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.app_bar_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        Initialize Views and Variables
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         mSharedPreferences = getSharedPreferences(Constants.getPrefsFile(), MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
         mPlayerList = new ArrayList<Player>();
 
-        initializeRecyclerView();
-        PlayersHandler.createPlayersList(mSharedPreferences, mPlayerScoreCardAdapter);
-        addPlayersToList(PlayersHandler.createPlayersList(mSharedPreferences, mPlayerScoreCardAdapter));
-
-
         mFab = (FloatingActionButton) findViewById(R.id.fab);
+
+        initializeRecyclerView();
+
+
 
 //        Add Listeners
         mFab.setOnClickListener(this);
 
 //        Run Logic
+        PlayersHandler.createPlayersList(mSharedPreferences, mPlayerScoreCardAdapter);
+        addPlayersToList(PlayersHandler.createPlayersList(mSharedPreferences, mPlayerScoreCardAdapter));
     }
 
+    // TODO: 2016-05-02 Move this to PlayerScoreCardAdapter.class
     private void addPlayersToList(ArrayList<Player> playersList) {
         for (int i = 0; i < playersList.size(); i++) {
             mPlayerList.add(playersList.get(i));
@@ -91,20 +78,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    // TODO: 2016-03-21 Convert into dialog themed activity and move to its own class.
-    private void startCalculatorApplication() {
-//        Intent intent = new Intent();
-//        intent.setAction(Intent.ACTION_MAIN);
-//        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-//        intent.setComponent(new ComponentName(Constants.CALCULATOR_PACKAGE_NAME,
-//                Constants.CALCULATOR_CLASS_NAME));
-//        try {
-//            this.startActivity(intent);
-//        } catch (ActivityNotFoundException noSuchActivity) {
-//            // TODO: 2016-04-23 handle exception where calculator intent filter is not registered
-//
-//        }
-
+    private void startCalculatorActivity() {
         Intent intent = new Intent(this, CalculatorActivity.class);
         startActivity(intent);
     }
@@ -115,21 +89,11 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.fab:
-                startCalculatorApplication();
+                startCalculatorActivity();
             default:
         }
 
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
@@ -145,57 +109,20 @@ public class MainActivity extends AppCompatActivity
 //         automatically handle clicks on the Home/Up button, so long
 //         as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-//        noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_add_player:
                 PlayersHandler.addNewPlayers(mPlayerList, mSharedPreferences, mPlayerScoreCardAdapter, 1);
                 break;
-
             case R.id.action_clear_players:
                 PlayersHandler.resetPlayersList(mPlayerList, mSharedPreferences, mPlayerScoreCardAdapter);
                 break;
-
             default:
                 return true;
 
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.nav_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                break;
-
-            case R.id.nav_gallery:
-                break;
-
-            case R.id.nav_slideshow:
-                break;
-
-            case R.id.nav_manage:
-                break;
-
-            case R.id.nav_share:
-                break;
-
-            case R.id.nav_send:
-                break;
-            default:
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

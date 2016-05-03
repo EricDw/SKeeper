@@ -25,6 +25,7 @@
         android:textColor="@android:color/black"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:paddingStart="@dimen/activity_horizontal_margin"
         tools:text="Player 1:"/>
 
     <EditText
@@ -37,7 +38,9 @@
         android:inputType="number"
         android:textColor="@android:color/black"
         android:textSize="20sp"
+        android:elegantTextHeight="true"
         android:textStyle="bold"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
         tools:text="9999"/>
 
     <Button
