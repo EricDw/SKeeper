@@ -18,7 +18,7 @@ public class CalculatorActivity extends AppCompatActivity {
 
     float mValueOne, mValueTwo;
 
-    boolean mAddition, mSubtract, mMultiplication, mDivision, mJustGaveAnswer = false;
+    boolean mAddition, mSubtract, mMultiplication, mDivision, mJustGaveAnswer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,7 @@ public class CalculatorActivity extends AppCompatActivity {
 
         initializeScreen();
         mInputField.setText("0");
+        mJustGaveAnswer = true;
 
         mButton1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +175,7 @@ public class CalculatorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mInputField.setText("0");
+                mJustGaveAnswer = true;
             }
         });
 

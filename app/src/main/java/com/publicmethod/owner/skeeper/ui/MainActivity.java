@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Initialize variables
         mSharedPreferences = getSharedPreferences(Constants.getPrefsFile(), MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
         mPlayerList = new ArrayList<Player>();
@@ -49,8 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
         initializeRecyclerView();
-
-
 
 //        Add Listeners
         mFab.setOnClickListener(this);

@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/button1"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
         android:textSize="30sp"
         android:gravity="end"
         tools:text="9999999"/>
