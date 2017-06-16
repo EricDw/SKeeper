@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.activities.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,7 +22,23 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

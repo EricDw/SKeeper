@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    tools:context=".ui.activities.MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:longClickable="true"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/list_item_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:title="A Player Name" />
+
+        <EditText
+            android:id="@+id/editText_player_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:inputType="number"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="9999" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:id="@+id/button_minus"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="@string/button_minus_text"
+                android:layout_weight="1"
+                android:textSize="25sp" />
+
+            <Button
+                android:id="@+id/button_add"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/button_add_text"
+                android:textSize="25sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
